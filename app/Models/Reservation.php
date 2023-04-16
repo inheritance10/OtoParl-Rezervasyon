@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CarPark extends Model
+class Reservation extends Model
 {
     use HasFactory;
 
     public $guarded = [];
 
-    public function places()
+    public function users()
     {
-        return $this->hasMany(CarParkPlace::class,'id','carpark_id');
+        return $this->hasMany(User::class,'user_id','id');
     }
 }

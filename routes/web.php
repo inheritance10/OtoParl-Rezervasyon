@@ -18,34 +18,20 @@ use App\Http\Controllers\Frontend\HomeController;
 
 
 Route::group(['middleware' => 'auth'], function (){
-
     Route::get('/otoparkcim', [HomeController::class,'index'])->name('home');
+    Route::get('/get-park-place/{id}/{floor}', [HomeController::class,'getParkPlace'])->name('get-park-place');
+    Route::get('/reservation/{id}/{date}', [HomeController::class,'reservation'])->name('reservation');
+    Route::post('/date-reservation-confirm', [HomeController::class,'dateReservationConfirm'])->name('date-reservation-confirm');
+    Route::post('/hour-reservation-confirm', [HomeController::class,'hourReservationConfirm'])->name('hour-reservation-confirm');
     Route::post('/dateQuery', [HomeController::class,'dateQuery'])->name('dateQuery');
 });
 
 Route::prefix('/')->group(function () {
-    Route::get('/login', [UserController::class,'login'])->name('signin');
-
+    Route::get('/', [UserController::class,'login'])->name('signin');
     Route::post('/loginPost', [UserController::class,'loginPost'])->name('loginPost');
-
     Route::post('/logout', [UserController::class,'logout'])->name('logout');
-
-
     Route::get('/register', [UserController::class,'register'])->name('register');
-
     Route::post('/registerPost', [UserController::class,'registerPost'])->name('registerPost');
-
-
 });
 
 
-
-/*Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/', function () {
-        return Inertia::render('frontend.layout');
-    })->name('dashboard');
-});*/

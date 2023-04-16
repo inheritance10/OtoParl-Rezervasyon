@@ -7,7 +7,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Starter</title>
+    <title>Admin Panel</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="/backend/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -15,44 +15,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="/backend/bower_components/font-awesome/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="/backend/bower_components/Ionicons/css/ionicons.min.css">
-    <!-- Theme style -->/backend/
     <link rel="stylesheet" href="/backend/dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect. -->
     <link rel="stylesheet" href="/backend/dist/css/skins/skin-blue.min.css">
-
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
+
     <![endif]-->
 
     <!-- Google Font -->
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+    <link src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
-<!--
-BODY TAG OPTIONS:
-=================
-Apply one or more of the following classes to get the
-desired effect
-|---------------------------------------------------------|
-| SKINS         | skin-blue                               |
-|               | skin-black                              |
-|               | skin-purple                             |
-|               | skin-yellow                             |
-|               | skin-red                                |
-|               | skin-green                              |
-|---------------------------------------------------------|
-|LAYOUT OPTIONS | fixed                                   |
-|               | layout-boxed                            |
-|               | layout-top-nav                          |
-|               | sidebar-collapse                        |
-|               | sidebar-mini                            |
-|---------------------------------------------------------|
--->
+
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
@@ -62,9 +47,9 @@ desired effect
         <!-- Logo -->
         <a href="index2.html" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>A</b>LT</span>
+            <span class="logo-mini"><b>O</b>TO</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>Admin</b>LTE</span>
+            <span class="logo-lg"><b>Admin</b>Otopark</span>
         </a>
 
         <!-- Header Navbar -->
@@ -92,7 +77,7 @@ desired effect
                                         <a href="#">
                                             <div class="pull-left">
                                                 <!-- User Image -->
-                                                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                <img src="/backend/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                                             </div>
                                             <!-- Message title and timestamp -->
                                             <h4>
@@ -177,14 +162,14 @@ desired effect
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!-- The user image in the navbar-->
-                            <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                            <img src="/backend/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
                             <span class="hidden-xs">Alexander Pierce</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
                             <li class="user-header">
-                                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                <img src="/backend/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                                 <p>
                                     Alexander Pierce - Web Developer
@@ -234,44 +219,24 @@ desired effect
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                    <img src="/backend/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
                     <p>Alexander Pierce</p>
-                    <!-- Status -->
-                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
             </div>
 
-            <!-- search form (Optional) -->
-            <form action="#" method="get" class="sidebar-form">
-                <div class="input-group">
-                    <input type="text" name="q" class="form-control" placeholder="Search...">
-                    <span class="input-group-btn">
-              <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-              </button>
-            </span>
-                </div>
-            </form>
-            <!-- /.search form -->
+
 
             <!-- Sidebar Menu -->
             <ul class="sidebar-menu" data-widget="tree">
-                <li class="header">HEADER</li>
                 <!-- Optionally, you can add icons to the links -->
-                <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
-                <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
-                        <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="#">Link in level 2</a></li>
-                        <li><a href="#">Link in level 2</a></li>
-                    </ul>
-                </li>
+                <li><a href="#"><i class="fa fa-link"></i> <span>Tüm Rezervasyonlar</span></a></li>
+                <li><a href="#"><i class="fa fa-link"></i> <span>Günlük Rezervasyonlar</span></a></li>
+                <li><a href="#"><i class="fa fa-link"></i> <span>Saatlik Rezervasyonlar</span></a></li>
+                <li><a href="#"><i class="fa fa-link"></i> <span>Abone Park Yerleri</span></a></li>
+                <li><a href="{{route('car-park-info')}}"><i class="fa fa-link"></i> <span>Otopark Bilgileri</span></a></li>
+                <li><a href="{{route('car-park-place')}}"><i class="fa fa-link"></i> <span>Park Yeri Bilgileri</span></a></li>
             </ul>
             <!-- /.sidebar-menu -->
         </section>
@@ -286,24 +251,13 @@ desired effect
         <!-- Main content -->
         <section class="content container-fluid">
 
-            <!--------------------------
-              | Your Page Content Here |
-              -------------------------->
+
 
         </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
 
-    <!-- Main Footer -->
-    <footer class="main-footer">
-        <!-- To the right -->
-        <div class="pull-right hidden-xs">
-            Anything you want
-        </div>
-        <!-- Default to the left -->
-        <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
-    </footer>
+    </div>
+
+
 
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
@@ -387,14 +341,147 @@ desired effect
 <!-- REQUIRED JS SCRIPTS -->
 
 <!-- jQuery 3 -->
-<script src="/backend/bower_components/jquery/dist/jquery.min.js"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="/backend/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- AdminLTE App -->
-<script src="/backend/dist/js/adminlte.min.js"></script>
 
-<!-- Optionally, you can add Slimscroll and FastClick plugins.
-     Both of these plugins are recommended to enhance the
-     user experience. -->
+
+
+<script src="/backend/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/backend/dist/js/adminlte.min.js"></script>
+<script src="/backend/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+
+<script>
+
+
+
+    $(document).ready(function () {
+        toastr.options = {
+            "closeButton": true,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-bottom-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        $('#myTable').DataTable();
+
+        /*  $('#dtBasicExample').DataTable();
+           $('.dataTables_length').addClass('bs-select');*/
+    });
+
+    $('#saveCarPark').on('click', function (){
+        let name = $('#name').val();
+        let floor_count = $('#floor_count').val();
+        let park_count = $('#park_count').val();
+
+        if(name == '' || floor_count == '' || park_count == ''){
+            toastr.error('Lütfen Tüm Alanları Doldurunuz', 'Hata')
+            return false;
+        }
+
+        $.ajax({
+            type: "POST",
+            dataType: 'JSON',
+            url: '{{route('car-park-create')}}',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                name: name,
+                floor_count: floor_count,
+                park_count: park_count
+            },
+            success: function(response){
+                if(response.status == 1){
+                    window.location.href = '{{route('car-park-info')}}'
+                    toastr.success(response.message,'Başarılı');
+                }else if(response.status == 2){
+                    toastr.error(response.message,'Hata')
+                }else{
+                    toastr.error(response.message,'Hata')
+                }
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+    })
+
+    $('#updateCarPark').on('click', function (){
+        let id = $('#id').val();
+        let name = $('#name').val();
+        let floor_count = $('#floor_count').val();
+        let park_count = $('#park_count').val();
+
+        if(name == '' || floor_count == '' || park_count == ''){
+            toastr.error('Lütfen Tüm Alanları Doldurunuz', 'Hata')
+            return false;
+        }
+
+        $.ajax({
+            type: "POST",
+            dataType: 'JSON',
+            url: '{{route('car-park-update')}}',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                name: name,
+                floor_count: floor_count,
+                park_count: park_count,
+                id: id
+            },
+            success: function(response){
+                if(response.status == 1){
+                    window.location.href = '{{route('car-park-info')}}'
+                    toastr.success(response.message,'Başarılı');
+                }else if(response.status == 2){
+                    toastr.error(response.message,'Hata')
+                }else{
+                    toastr.error(response.message,'Hata')
+                }
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+    })
+
+    function deleteCarPark(id) {
+        $.ajax({
+            type: "GET",
+            dataType: 'JSON',
+            url: '{{route('car-park-delete')}}',
+            data: {
+                id: id
+            },
+            success: function (response) {
+                if (response.status == 1) {
+                    window.location.href = '{{route('car-park-info')}}'
+                    toastr.success(response.message, 'Başarılı');
+                } else if (response.status == 2) {
+                    toastr.error(response.message, 'Hata')
+                } else {
+                    toastr.error(response.message, 'Hata')
+                }
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+    }
+
+
+
+</script>
+
 </body>
 </html>

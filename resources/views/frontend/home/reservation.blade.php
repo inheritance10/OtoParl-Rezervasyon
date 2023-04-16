@@ -157,7 +157,7 @@
 
 <nav style="margin: 8px" class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="m-1 navbar-brand" href="#">
-        <img src="./assets/img/car.png" width="70px" height="70px" alt="">
+        <img src="../../assets/img/car.png" width="70px" height="70px" alt="">
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -180,54 +180,280 @@
     </div>
 </nav>
 
-<div class="section-center">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-7 col-md-push-5">
-                <div class="booking-cta">
-                    <h1>Otopark Rezervasyon</h1>
+<div class="mt-3 container">
+    <div class="section-center">
+        <a onclick="$.hourReservationShow()" class="btn btn-warning" href="#">Saatlik Rezervasyon</a>
+        <a onclick="$.dateReservationShow()" class="btn btn-info" href="#">Günlük Rezervasyon</a>
+    </div>
 
+</div>
+
+<div class="section-center">
+
+
+    <div id="dateReservationContainer" style="display: none" class="mt-5 container">
+        <div class="row">
+            <h1>Günlük Rezervasyon Oluştur</h1>
+            <div  class="col-md-6 col-md-pull-7">
+                <div class="booking-form">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <span class="form-label">Başlangıç Tarih Seçiniz</span>
+                                    <input class="form-control" id="startDate" type="date" required>
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
-            <div class="col-md-4 col-md-pull-7">
-                <div class="booking-form">
-                    <form method="post" action="{{route('dateQuery')}}">
-                        @csrf
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <span class="form-label">Tarih Seçiniz</span>
-                                    <input class="form-control" id="date" type="date" required>
-                                </div>
-                            </div>
 
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <span class="form-label">Otopark Seçiniz</span>
-                                    <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
-                                </div>
+            <div class="col-md-6 col-md-pull-7">
+                <div class="booking-form">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <span class="form-label">Bitiş Tarih Seçiniz</span>
+                                <input class="form-control" id="endDate" type="date" required>
                             </div>
                         </div>
-                        <div class="form-btn">
-                            <button type="submit" class="submit-btn">Sorgula</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
+            </div>
+
+            <div class="form-btn">
+                <a class="btn btn-success" onclick="$.confirmDateReservation('{{$id}}')">Rezervasyon  Tamamla</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="hourReservationContainer" style="display: none"  class="mt-5 container">
+        <div class="row">
+            <h1>Saatlik Rezervasyon Oluştur</h1>
+            <p class="alert alert-info">
+                {{$date}} tarihi için rezervasyon oluşturmaktasınız
+            </p>
+            <div>
+                <h3>Saatlik Ücretler</h3>
+                <p class="mb-3 mt-3 alert alert-info">
+                    0 - 1 => 33₺ <br>
+                    1 - 2 => 41₺ <br>
+                    2 - 4 => 45₺ <br>
+                    4 - 8 => 60₺ <br>
+                    8 - 12 => 75₺
+                </p>
+            </div>
+            <div  class="col-md-6 col-md-pull-7">
+                <div class="booking-form">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <span class="form-label">Başlangıç Saati Seçiniz</span>
+                                <select class="form-control" name="startHour" id="startHour">
+                                    @for($i=7; $i <= 23 ; $i++)
+                                        <option>
+                                            {{$i}} : 00
+                                        </option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-md-pull-7">
+                <div class="booking-form">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <span class="form-label">Bitiş Saati Seçiniz</span>
+                                <select class="form-control" name="endHour" id="endHour">
+                                    @for($i=7; $i <= 23 ; $i++)
+                                        <option>
+                                            {{$i}} : 00
+                                        </option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3 form-btn">
+                <a id="confirmHourButton" disabled="true" onclick="$.confirmHourReservation('{{$id}}','{{$date}}')" class="btn btn-success">Rezervasyon  Tamamla</a>
+                <a onclick="$.priceHourCalculate()" class="btn btn-warning">Ücret Hesapla</a>
+                <p style="display: none" class="alert alert-danger" id="priceText">
+
+                </p>
             </div>
         </div>
     </div>
 </div>
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function (){
+        let hourPrice = 0;
+        let datePrice = 0;
+        $.hourReservationShow = function ()
+        {
+            $('#hourReservationContainer').removeAttr('style');
+            $('#dateReservationContainer').attr('style','display:none');
+        }
+
+        $.dateReservationShow = function ()
+        {
+            $('#dateReservationContainer').removeAttr('style');
+            $('#hourReservationContainer').attr('style','display:none');
+        }
+
+        $.priceHourCalculate = function (){
+            let startHour =$('#startHour').val().replace(': 00','');
+            let endHour =$('#endHour').val().replace(': 00','');
+
+            let diffHour = parseInt(endHour) - parseInt(startHour);
+
+
+            if(0 <= diffHour <= 1){
+                console.log(diffHour);
+                hourPrice = 33;
+                console.log(hourPrice)
+                return  false;
+            }
+            if(1 < diffHour <= 2){
+                console.log(diffHour);
+                hourPrice = 41
+                console.log(hourPrice)
+                return  false;
+            }
+            return  false;
+           if(2 < diffHour <= 4) {
+                console.log(diffHour);
+                hourPrice = 45
+                console.log(hourPrice)
+            }
+            if(4 < diffHour <= 8){
+                console.log(diffHour);
+                hourPrice = 60
+                console.log(hourPrice)
+            }  if(diffHour > 8){
+                console.log(diffHour);
+                hourPrice = 75
+                console.log(hourPrice)
+            }
+
+            return false;
+            $('#confirmHourButton').removeAttr('disabled');
+
+            $('#priceText').removeAttr('style');
+            $('#priceText').html('Ödenecek Tutar = '+hourPrice+'₺');
+            hourPrice = 0;
+
+        }
+
+
+        $.confirmHourReservation = function (id,date){
+            let startHour = $('#startHour').val();
+            let endHour = $('#endHour').val();
+            let type = 1;
+
+            if(startHour == endHour){
+                toastr.error('Bşalnagıç Saati ile Bitiş saati aynı olamaz', 'Hata')
+                return false;
+            }
+
+            if(startHour > endHour){
+                toastr.error('Bşalnagıç Saati  Bitiş saatinden büyük olamaz', 'Hata')
+                return false;
+            }
+
+            $.ajax({
+                type: "POST",
+                dataType: 'JSON',
+                url: '{{route('hour-reservation-confirm')}}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    startHour: startHour,
+                    endHour: endHour,
+                    type: type,
+                    id: id,
+                    date: date,
+                    price: hourPrice
+                },
+                success: function(response){
+                    if(response.status == 1){
+                        toastr.success(response.message,'Başarılı');
+                        window.location.href = '{{route('home')}}'
+                    }else if(response.status == 2){
+                        toastr.error(response.message,'Hata')
+                    }else{
+                        toastr.error(response.message,'Hata')
+                    }
+                },
+                error: function(response) {
+                    console.log(response);
+                }
+            });
+        }
+
+
+        $.confirmDateReservation = function (id){
+            let startDate = $('#startDate').val();
+            let endDate = $('#endDate').val();
+            let type = 2;
+
+
+
+            if(startDate == endDate){
+                toastr.error('Başlangıç tarihi ile Bitiş tarihi aynı olamaz', 'Hata')
+                return false;
+            }
+
+            if(startDate > endDate){
+                toastr.error('Başlangıç tarihi  Bitiş tarihinden büyük olamaz', 'Hata')
+                return false;
+            }
+
+            $.ajax({
+                type: "POST",
+                dataType: 'JSON',
+                url: '{{route('date-reservation-confirm')}}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    startDate: startDate,
+                    endDate: endDate,
+                    type: type,
+                    id: id,
+                },
+                success: function(response){
+                    if(response.status == 1){
+                        toastr.success(response.message,'Başarılı');
+                        window.location.href = '{{route('home')}}'
+                    }else if(response.status == 2){
+                        toastr.error(response.message,'Hata')
+                    }else{
+                        toastr.error(response.message,'Hata')
+                    }
+                },
+                error: function(response) {
+                    console.log(response);
+                }
+            });
+        }
+
+
+
+    })
+</script>
+
 </body>
 </html>
 

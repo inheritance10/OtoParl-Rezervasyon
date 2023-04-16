@@ -155,7 +155,7 @@
 
 <nav style="margin: 8px" class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="m-1 navbar-brand" href="#">
-        <img src="./assets/img/car.png" width="70px" height="70px" alt="">
+        <img src="../../assets/img/car.png" width="70px" height="70px" alt="">
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -179,30 +179,102 @@
 </nav>
 
 
-<div id="booking" class="section">
+
+
+
+
     <div class="container">
+
+        <div class="col-md-12 col-md-pull-7">
+            <div class="booking-form">
+                <form method="get" action="{{route('get-park-place', [$id,$floor])}}">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <span class="form-label">Tarih Seçiniz</span>
+                                <input class="form-control" id="date" name="date" type="date" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <span class="form-label">Başlangıç Saati Seçiniz</span>
+                                <select class="form-control" name="start_hour" type="date" required>
+                                    @for($i=7; $i<=23; $i++)
+                                        <option>
+                                            {{$i}}
+                                        </option>
+                                    @endfor
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <span class="form-label">Bitiş Saati Seçiniz</span>
+                                <select class="form-control" name="end_hour" type="date" required>
+                                    @for($i=7; $i<=23; $i++)
+                                        <option>
+                                            {{$i}}
+                                        </option>
+                                    @endfor
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-btn">
+                        <button type="submit" class="submit-btn">Sorgula</button>
+                    </div>
+                </form>
+            </div>
+
+            <p class="mt-3 alert alert-info">
+                {{$date}} tarihi  @if($start_hour != '' && $end_hour != '') {{$start_hour}} - {{$end_hour}} saatleri arası rezervasyon yapmaktasınız @endif
+            </p>
+        </div>
+
+        <br><br>
         <div class="row">
-            <?php
-             $floor_count = $floor[0]->floor_count;
-             $park_count = $floor[0]->park_count;
-            ?>
-            @for($i=1 ; $i<=$floor_count; $i++)
-                <div class="col-sm-3 m-4">
-                    <div class="card">
+            <h2>Müsait Park Yerleri</h2>
+            @foreach($available as $data)
+                <div class="col-sm-2 mt-3">
+                    <div style="background-color: green"  class="card">
                         <div class="card-body">
-                            <a href="{{route('get-park-place', [$floor[0]->id,$i])}}" style="text-decoration: none">
-                                <h1>
-                                    {{$i}}. Kat
+                            <a href="{{route('reservation', ['id' => $data['id'], 'date' => $date])}}" style="text-decoration: none">
+                                <h1 style="color: white">
+                                    {{$data['name']}}
                                 </h1>
-                                <p class="card-text">Rerzervasyon yapmak için tıklayın</p>
+                                <p style="color: white" class="card-text">Devam etmek için tıklayın</p>
                             </a>
                         </div>
                     </div>
                 </div>
-            @endfor
+            @endforeach
+        </div>
+
+        <br><br>
+
+        <div class="row">
+            <h2>Dolu Park Yerleri</h2>
+            @foreach($notAvailable as $data)
+                <div class="col-sm-2 mt-3">
+                    <div style="background-color: red" class="card">
+                        <div class="card-body">
+                            <a disabled href="" style="text-decoration: none">
+                                <h1 style="color: white">
+                                    {{$data['name']}}
+                                </h1>
+                                <p style="color: white" class="card-text">Devam etmek için tıklayın</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
-</div>
+
+
+
 
 
 
@@ -212,3 +284,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 </body>
 </html>
+

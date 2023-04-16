@@ -59,7 +59,7 @@
                     <div class="text-center text-lg-start mt-4 pt-2">
                         <button id="registerBtn" type="button" class="btn btn-primary btn-lg"
                                 style="padding-left: 2.5rem; padding-right: 2.5rem;">Kayıt Ol</button>
-                        <p class="small fw-bold mt-2 pt-1 mb-0">Hesabınız zaten var mı? <a href="{{route('login')}}" class="link-danger">Giriş Yapın</a></p>
+                        <p class="small fw-bold mt-2 pt-1 mb-0">Hesabınız zaten var mı? <a href="{{route('signin')}}" class="link-danger">Giriş Yapın</a></p>
                     </div>
 
                 </form>

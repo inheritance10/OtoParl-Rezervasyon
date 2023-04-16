@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('car_parks', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->integer('floor_count');
-            $table->integer('park_count');
-            $table->timestamps();
+        Schema::table('reservations', function (Blueprint $table) {
+            $table->date('end_date')->nullable();
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('car_parks');
+        Schema::table('reservations', function (Blueprint $table) {
+            $table->dropColumn('end_date');
+        });
     }
 };
