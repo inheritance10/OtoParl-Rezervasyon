@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\CarPark;
 use App\Models\CarParkPlace;
+use Exception;
 use Illuminate\Http\Request;
 
 class CarParkController extends Controller
 {
+    //otopark kayıtlarını listeler
     public function index()
     {
         $data = CarPark::orderBy('created_at', 'desc')->get();
@@ -55,6 +57,7 @@ class CarParkController extends Controller
         }
     }
 
+    //otopark kaydetme fonksiyonu
     public function store(Request $request)
     {
         try {
@@ -86,6 +89,7 @@ class CarParkController extends Controller
         }
     }
 
+    //otopark kaydı silme fonksiyonu
     public function delete(Request $request)
     {
         try {
@@ -111,6 +115,7 @@ class CarParkController extends Controller
         }
     }
 
+    //kat sayısına ve girilen park yeri sayısına göre her katta ki park yeri isimlendirmesini ve tabloya kaydetme fonksiyonu
     public function createParkPlace($id,$floor_count, $park_count)
     {
         $arr = array('A', 'B', 'C', 'D', 'E', 'F', 'G','H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');

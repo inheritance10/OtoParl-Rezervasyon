@@ -13,6 +13,11 @@ class Reservation extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class,'user_id','id');
+        return $this->hasOne(User::class,'id','user_id');
+    }
+
+    public function car_park_places()
+    {
+        return $this->belongsTo(CarParkPlace::class,'park_place_id','id');
     }
 }

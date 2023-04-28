@@ -149,6 +149,43 @@
             font-size: 16px;
             color: rgba(255, 255, 255, 0.8);
         }
+
+        .jqModal {
+            display: none; /* By default, display will be hidden */
+            position: fixed; /* Position will be fixed */
+            z-index: 1; /* makes the modal box display on the top */
+            padding-top: 100px; /* Location of the modal box */
+            left: 0;
+            top: 0;
+            width: 100%; /* width 100%, resizable according to window size */
+            height: 100%; /* height 100%, resizable according to window size */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* color for the Fallback */
+            background-color: rgba(0,0,0,0.7); /* Opacity for the fallback */
+        }
+        /* CSS for Modal Dialog Content Text */
+        .content {
+            background-color:#FFF;
+            margin: auto;
+            padding: 20px;
+            border: 3px solid #809;
+            width: 80%;
+        }
+        /* CSS for Cross or exit or close Button */
+        .exit {
+            color: #809;
+            float: right;
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .exit:hover,
+        .exit:focus {
+            color: #000;
+            cursor: pointer;
+        }
+        #modalBtn{
+
+        }
     </style>
 </head>
 <body>
@@ -168,7 +205,7 @@
                 <a class="nav-link" href="{{route('home')}}">Anasayfa</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Hesabım</a>
+                <a class="nav-link" href="{{route('account')}}">Hesabım</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit()">Çıkış</a>
@@ -184,6 +221,17 @@
     <div class="section-center">
         <a onclick="$.hourReservationShow()" class="btn btn-warning" href="#">Saatlik Rezervasyon</a>
         <a onclick="$.dateReservationShow()" class="btn btn-info" href="#">Günlük Rezervasyon</a>
+        <button  class="btn btn-success" id="modalBtn">Aylık Abone Ol</button>
+    </div>
+
+
+    <div id="modalDemo" class="jqModal">
+        <div class="content">
+            <span class="exit">&times;</span>
+            <p style="font-size: 22px; font-weight: bold">{{\Carbon\Carbon::now()->format('Y-m-d')}} / {{\Carbon\Carbon::now()->addDays(30)->format('Y-m-d')}} tarihleri arasında abone kaydı oluşturuyorsunuz</p>
+            <p class="alert alert-info" style="font-size: 18px; font-weight: bold">Ücret : 1200₺</p>
+            <a  class="btn btn-success" onclick="$.confirmSubscribReservation('{{$id}}')">Aylık Abone Ol</a>
+        </div>
     </div>
 
 </div>
@@ -193,7 +241,29 @@
 
     <div id="dateReservationContainer" style="display: none" class="mt-5 container">
         <div class="row">
-            <h1>Günlük Rezervasyon Oluştur</h1>
+            <h1>{{$carParkPlace->name}} İçin Günlük Rezervasyon Oluştur</h1>
+            @if(count($reservation) > 0)
+                <h4>Rezerv Edilen Tarihler</h4>
+                @foreach($reservation as $data)
+                    <div class="col-sm-4 mt-3">
+                        <div class="card alert alert-danger">
+                            <div class="card-body">
+                                <h3>{{$data->start_date}} / {{$data->end_date}} tarihler arası rezerve</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                @endforeach
+
+            @endif
+            <div>
+                <h3>Günlük Ücret</h3>
+                <p class="mb-3 mt-3 alert alert-info">
+                     85₺ <br>
+                </p>
+            </div>
+
+
             <div  class="col-md-6 col-md-pull-7">
                 <div class="booking-form">
                         <div class="row">
@@ -221,14 +291,18 @@
             </div>
 
             <div class="form-btn">
-                <a class="btn btn-success" onclick="$.confirmDateReservation('{{$id}}')">Rezervasyon  Tamamla</a>
+                <a style="display: none" id="confirmDateButton" class="btn btn-success" onclick="$.confirmDateReservation('{{$id}}')">Rezervasyon  Tamamla</a>
+                <a  onclick="$.priceDateCalculate()" class="btn btn-warning">Ücret Hesapla</a>
+                <p style="display: none" class="alert alert-danger" id="datePriceText">
+
+                </p>
             </div>
         </div>
     </div>
 
     <div id="hourReservationContainer" style="display: none"  class="mt-5 container">
         <div class="row">
-            <h1>Saatlik Rezervasyon Oluştur</h1>
+            <h1>{{$carParkPlace->name}} İçin Saatlik Rezervasyon Oluştur</h1>
             <p class="alert alert-info">
                 {{$date}} tarihi için rezervasyon oluşturmaktasınız
             </p>
@@ -281,8 +355,8 @@
             </div>
 
             <div class="mt-3 form-btn">
-                <a id="confirmHourButton" disabled="true" onclick="$.confirmHourReservation('{{$id}}','{{$date}}')" class="btn btn-success">Rezervasyon  Tamamla</a>
-                <a onclick="$.priceHourCalculate()" class="btn btn-warning">Ücret Hesapla</a>
+                <a id="confirmHourButton" style="display: none;" disabled="true" onclick="$.confirmHourReservation('{{$id}}','{{$date}}')" class="btn btn-success">Rezervasyon  Tamamla</a>
+                <a  onclick="$.priceHourCalculate()" class="btn btn-warning">Ücret Hesapla</a>
                 <p style="display: none" class="alert alert-danger" id="priceText">
 
                 </p>
@@ -315,63 +389,98 @@
             $('#hourReservationContainer').attr('style','display:none');
         }
 
+
+        $.priceDateCalculate = function (){
+            let startDate =$('#startDate').val();
+            let endDate =$('#endDate').val();
+
+            let d = new Date();
+
+            let month = d.getMonth()+1;
+            let day = d.getDate();
+
+            let output = d.getFullYear() + '-' +
+                (month<10 ? '0' : '') + month + '-' +
+                (day<10 ? '0' : '') + day;
+
+            if(startDate < output){
+                toastr.error('Başlangıç Tarihi ile Şimdi tarihan küçük olamaz', 'Hata')
+                return false;
+            }
+
+            if(startDate == endDate){
+                toastr.error('Başlangıç Tarihi ile Bitiş Trihi aynı olamaz', 'Hata')
+                return false;
+            }
+            if(startDate > endDate){
+                toastr.error('Başlangıç tarihi  Bitiş tarihinden büyük olamaz', 'Hata')
+                return false;
+            }
+
+
+
+            var startDay = new Date(startDate);
+            var endDay = new Date(endDate);
+
+            var millisBetween = startDay.getTime() - endDay.getTime();
+            var days = millisBetween / (1000 * 3600 * 24);
+            let dayDiff = Math.round(Math.abs(days));
+
+            datePrice = 85 * dayDiff;
+            console.log(datePrice);
+
+
+            $('#confirmDateButton').removeAttr('style');
+
+            $('#datePriceText').removeAttr('style');
+
+            $('#datePriceText').html('Ödenecek Tutar = '+datePrice+'₺');
+        }
         $.priceHourCalculate = function (){
             let startHour =$('#startHour').val().replace(': 00','');
             let endHour =$('#endHour').val().replace(': 00','');
 
+            if(startHour == endHour){
+                toastr.error('Başlangıç Saati ile Bitiş saati aynı olamaz', 'Hata')
+                return false;
+            }
+
             let diffHour = parseInt(endHour) - parseInt(startHour);
 
-
-            if(0 <= diffHour <= 1){
-                console.log(diffHour);
-                hourPrice = 33;
-                console.log(hourPrice)
-                return  false;
-            }
-            if(1 < diffHour <= 2){
-                console.log(diffHour);
+            if(0 <= diffHour && diffHour <= 1){
+                hourPrice = 31
+            }else if (diffHour > 1 && diffHour<=2){
                 hourPrice = 41
-                console.log(hourPrice)
-                return  false;
-            }
-            return  false;
-           if(2 < diffHour <= 4) {
-                console.log(diffHour);
+            }else if (diffHour > 2 && diffHour<=4){
                 hourPrice = 45
-                console.log(hourPrice)
-            }
-            if(4 < diffHour <= 8){
-                console.log(diffHour);
+            }else if (diffHour > 4 && diffHour<=8){
                 hourPrice = 60
-                console.log(hourPrice)
-            }  if(diffHour > 8){
-                console.log(diffHour);
-                hourPrice = 75
-                console.log(hourPrice)
+            }else{
+                hourPrice = 70
             }
-
-            return false;
-            $('#confirmHourButton').removeAttr('disabled');
+            $('#confirmHourButton').removeAttr('style');
 
             $('#priceText').removeAttr('style');
-            $('#priceText').html('Ödenecek Tutar = '+hourPrice+'₺');
-            hourPrice = 0;
 
+            $('#priceText').html('Ödenecek Tutar = '+hourPrice+'₺');
         }
 
 
         $.confirmHourReservation = function (id,date){
-            let startHour = $('#startHour').val();
-            let endHour = $('#endHour').val();
+            let startHour =$('#startHour').val();
+            let endHour =$('#endHour').val();
             let type = 1;
 
             if(startHour == endHour){
-                toastr.error('Bşalnagıç Saati ile Bitiş saati aynı olamaz', 'Hata')
+                toastr.error('Başlangıç Saati ile Bitiş saati aynı olamaz', 'Hata')
                 return false;
             }
 
-            if(startHour > endHour){
-                toastr.error('Bşalnagıç Saati  Bitiş saatinden büyük olamaz', 'Hata')
+            let start = $('#startHour').val().replace(': 00', '');
+            let end = $('#endHour').val().replace(': 00', '');
+
+            if(start > end){
+                toastr.error('Başlangıç Saati  Bitiş saatinden büyük olamaz', 'Hata')
                 return false;
             }
 
@@ -381,8 +490,8 @@
                 url: '{{route('hour-reservation-confirm')}}',
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    startHour: startHour,
-                    endHour: endHour,
+                    startHour: start,
+                    endHour: end,
                     type: type,
                     id: id,
                     date: date,
@@ -422,6 +531,9 @@
                 return false;
             }
 
+
+
+
             $.ajax({
                 type: "POST",
                 dataType: 'JSON',
@@ -432,6 +544,37 @@
                     endDate: endDate,
                     type: type,
                     id: id,
+                    price: datePrice
+                },
+                success: function(response){
+                    if(response.status == 1){
+                        toastr.success(response.message,'Başarılı');
+                        window.location.href = '{{route('home')}}'
+                    }else if(response.status == 2){
+                        toastr.error(response.message,'Hata')
+                    }else{
+                        toastr.error(response.message,'Hata')
+                    }
+                },
+                error: function(response) {
+                    console.log(response);
+                }
+            });
+        }
+
+
+        $.confirmSubscribReservation = function (id){
+            let type = 3;
+
+            $.ajax({
+                type: "POST",
+                dataType: 'JSON',
+                url: '{{route('subscrib-reservation-confirm')}}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    type: type,
+                    id: id,
+                    price: 1200
                 },
                 success: function(response){
                     if(response.status == 1){
@@ -451,7 +594,31 @@
 
 
 
+
+
+
     })
+
+
+    var myModal = document.getElementById("modalDemo");
+    // Set object for the button that will trigger the modal box
+    var myButton = document.getElementById("modalBtn");
+    // Set an element that will close the modal box
+    var exitBtn = document.getElementsByClassName("exit")[0];
+    // Allows display of modal box, when user clicks the button
+    myButton.onclick = function() {
+        myModal.style.display = "block";
+    }
+    // Allows the user to close the modal box, when user will click on (x) button
+    exitBtn.onclick = function() {
+        myModal.style.display = "none";
+    }
+    // Allows the user to close the modal box, even when the user clicks anywhere outside of the modal box
+    window.onclick = function(event) {
+        if (event.target == myModal) {
+            myModal.style.display = "none";
+        }
+    }
 </script>
 
 </body>

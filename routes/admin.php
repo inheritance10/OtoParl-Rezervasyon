@@ -6,8 +6,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\DefaultController;
 use App\Http\Controllers\Backend\CarParkController;
 use App\Http\Controllers\Backend\CarParkPlaceController;
-
+use App\Http\Controllers\Backend\ReservationController;
+use App\Http\Controllers\Backend\LoginController;
 Route::prefix('/admin')->group(function () {
+
+    Route::get('/login', [LoginController::class, 'index'])->name('index');
+    Route::post('/sign-in', [LoginController::class,'login'])->name('login-post');
+
     Route::get('/', [DefaultController::class,'index'])->name('dasboard');
     Route::get('/car-park-info', [CarParkController::class,'index'])->name('car-park-info');
     Route::get('/car-park-edit/{id}', [CarParkController::class,'edit'])->name('car-park-edit');
@@ -18,4 +23,10 @@ Route::prefix('/admin')->group(function () {
 
     Route::get('car-park-place', [CarParkPlaceController::class, 'index'])->name('car-park-place');
 
+    //Reservation
+    Route::get('/reservation-hour', [ReservationController::class,'getHourReservations'])->name('reservation-hour');
+    Route::get('/reservation-date', [ReservationController::class,'getDateReservations'])->name('reservation-date');
+    Route::get('/reservation-subscrib', [ReservationController::class,'getSubscribReservations'])->name('reservation-subscrib');
+
+    Route::get('/reservation-finish/{id}', [ReservationController::class, 'reservationFinish'])->name('reservation-finish');
 });

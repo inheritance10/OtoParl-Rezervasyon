@@ -20,6 +20,7 @@ class UserController extends Controller
         return view('frontend.login.login');
     }
 
+    //Giriş işlemi için gereken kodlar
     public function loginPost(Request $request)
     {
         try {
@@ -41,9 +42,6 @@ class UserController extends Controller
                 'message' => $e.getMessage()
             ]);
         }
-
-
-
     }
 
     public function register()
@@ -51,6 +49,7 @@ class UserController extends Controller
         return view('frontend.register.register');
     }
 
+    //üye olmak için gereken kodlar
     public function registerPost(Request $request)
     {
         try {
@@ -79,6 +78,7 @@ class UserController extends Controller
         }
     }
 
+    //Çıkış yapılınca çalışan kodlar
     public function logout(Request $request)
     {
         Auth::logout();

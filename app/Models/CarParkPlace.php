@@ -10,4 +10,9 @@ class CarParkPlace extends Model
     use HasFactory;
 
     public $guarded = [];
+
+    public function reservation()
+    {
+        return $this->hasMany(Reservation::class,'id','park_place_id');
+    }
 }

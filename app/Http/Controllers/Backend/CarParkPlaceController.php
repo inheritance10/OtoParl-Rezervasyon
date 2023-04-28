@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class CarParkPlaceController extends Controller
 {
+    //park yeri bilgileri
     public function index()
     {
         $data = CarParkPlace::all();

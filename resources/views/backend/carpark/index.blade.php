@@ -26,11 +26,6 @@
                 <td>{{$value->floor_count}}</td>
                 <td>{{$value->park_count}}</td>
                 <td>
-                    <a class="btn btn-info" href="{{route('car-park-edit', $value->id)}}">
-                        Düzenle
-                    </a>
-                </td>
-                <td>
                     <a class="btn btn-danger" href="#" onclick="deleteCarPark('{{$value->id}}')">
                         Sil
                     </a>

@@ -166,7 +166,7 @@
                 <a class="nav-link" href="{{route('home')}}">Anasayfa</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Hesabım</a>
+                <a class="nav-link" href="{{route('account')}}">Hesabım</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit()">Çıkış</a>
@@ -181,6 +181,7 @@
 
 <div id="booking" class="section">
     <div class="container">
+        <img width="1000px" height="500px" src="./assets/img/oto.png" alt="">
         <div class="row">
             <?php
              $floor_count = $floor[0]->floor_count;

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\QrController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,11 +20,15 @@ use App\Http\Controllers\Frontend\HomeController;
 
 Route::group(['middleware' => 'auth'], function (){
     Route::get('/otoparkcim', [HomeController::class,'index'])->name('home');
+    Route::get('/account', [HomeController::class,'account'])->name('account');
     Route::get('/get-park-place/{id}/{floor}', [HomeController::class,'getParkPlace'])->name('get-park-place');
     Route::get('/reservation/{id}/{date}', [HomeController::class,'reservation'])->name('reservation');
     Route::post('/date-reservation-confirm', [HomeController::class,'dateReservationConfirm'])->name('date-reservation-confirm');
     Route::post('/hour-reservation-confirm', [HomeController::class,'hourReservationConfirm'])->name('hour-reservation-confirm');
-    Route::post('/dateQuery', [HomeController::class,'dateQuery'])->name('dateQuery');
+    Route::post('/subscrib-reservation-confirm', [HomeController::class,'subscribReservationConfirm'])->name('subscrib-reservation-confirm');
+
+    Route::get('qr_code/index',[QRController::class,'index'])->name('qrcode.index');
+    Route::get('qr_code/create',[QRController::class,'create'])->name('qrcode.create');
 });
 
 Route::prefix('/')->group(function () {

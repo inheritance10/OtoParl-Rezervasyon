@@ -183,105 +183,45 @@
 
 
 
-    <div class="container">
+<div class="container">
 
-        <div class="col-md-12 col-md-pull-7">
-            <div class="booking-form">
-                <form method="get" action="{{route('get-park-place', [$id,$floor])}}">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <span class="form-label">Tarih Seçiniz</span>
-                                <input class="form-control" id="date" name="date" type="date" required>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <span class="form-label">Başlangıç Saati Seçiniz</span>
-                                <select class="form-control" name="start_hour" type="date" required>
-                                    @for($i=7; $i<=23; $i++)
-                                        <option>
-                                            {{$i}} : 00
-                                        </option>
-                                    @endfor
+    <div class="row">
+        <h2>Rezervasyonlarım</h2>
 
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <span class="form-label">Bitiş Saati Seçiniz</span>
-                                <select class="form-control" name="end_hour" type="date" required>
-                                    @for($i=7; $i<=23; $i++)
-                                        <option>
-                                            {{$i}} : 00
-                                        </option>
-                                    @endfor
+        @if(count($reservation) > 0)
+            @foreach($reservation as $data)
+                <div class="col-sm-6 mt-3">
+                    <div class="alert alert-success card">
+                        <div class="card-body">
+                            <h1 style="color: black">
+                                {{$data->car_park_places->name}} - {{$data->car_park_places->floor}} . Kat
+                            </h1>
+                            <h3>
+                                PNR: {{$data->pnr_code}}
+                            </h3>
+                            @if($data->type == 1)
+                                <p style="color: #000">{{$data->date}} tarihinde  {{$data->start_hour}} : 00 - {{$data->end_hour}} : 00</p>
+                            @elseif($data->type == 2)
+                                <p style="color: #000">{{$data->start_date}} / {{$data->end_date}}</p>
+                            @elseif($data->type == 3)
+                                <p style="color: #000">{{$data->start_date}} / {{$data->end_date}} aralığında abonesiniz</p>
+                            @endif
 
-                                </select>
-                            </div>
                         </div>
                     </div>
-                    <div class="form-btn">
-                        <button type="submit" class="submit-btn">Sorgula</button>
-                    </div>
-                </form>
+                </div>
+            @endforeach
+        @else
+            <div class="alert alert-danger">
+                <p>
+                    Aktif Rezervasyonunuz Bulunmamaktadır
+                </p>
             </div>
+        @endif
 
-            <p class="mt-3 alert alert-info">
-                {{$date}} tarihi  @if($start_hour != '' && $end_hour != '') {{$start_hour}} - {{$end_hour}} saatleri arası rezervasyon yapmaktasınız @endif
-            </p>
-        </div>
-
-        <br><br>
-        <div class="row">
-            <h2>Müsait Park Yerleri</h2>
-            @foreach($available as $data)
-                <div class="col-sm-2 mt-3">
-                    <div style="background-color: green"  class="card">
-                        <div class="card-body">
-                            <a href="{{route('reservation', ['id' => $data['id'], 'date' => $date])}}" style="text-decoration: none">
-                                <h1 style="color: white">
-                                    {{$data['name']}}
-                                </h1>
-                                <p style="color: white" class="card-text">Devam etmek için tıklayın</p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-        <br><br>
-
-        <div class="mb-5 row">
-            <h2>Dolu Park Yerleri</h2>
-            @foreach($notAvailable as $data)
-                <div class="col-sm-4 mt-3">
-                    <div style="background-color: red" class="card">
-                        <div class="card-body">
-                            <a href="#" disabled style="cursor: none; text-decoration: none">
-                                <h1 style="color: white">
-                                    {{$data['name']}}
-                                </h1>
-                                @if(count($data['table']) > 0)
-                                    @foreach($data['table'] as $value)
-                                            <p style="font-weight: bold;color: white" class="card-text">{{$value['start_hour']}}-{{$value['end_hour']}} arasında rezervedir</p>
-                                    @endforeach
-                                @elseif(count($data['isSubscrib']) > 0)
-                                    @foreach($data['isSubscrib'] as $value)
-                                            <p style="font-weight: bold;color: white" class="card-text">{{$value['start_date']}}/{{$value['end_date']}} arasında abonman olarak ayırtılmıştır</p>
-                                    @endforeach
-                                @endif
-
-
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
     </div>
+
+</div>
 
 
 
@@ -292,4 +232,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 </body>
 </html>
+
 

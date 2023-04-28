@@ -54,7 +54,7 @@ const enableTwoFactorAuthentication = () => {
 };
 
 const showQrCode = () => {
-    return axios.get(route('two-factor.qr-code')).then(response => {
+    return axios.get(route('two-factor.QrCode-code')).then(response => {
         qrCode.value = response.data.svg;
     });
 };
