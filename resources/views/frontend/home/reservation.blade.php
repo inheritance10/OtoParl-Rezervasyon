@@ -479,7 +479,7 @@
             let start = $('#startHour').val().replace(': 00', '');
             let end = $('#endHour').val().replace(': 00', '');
 
-            if(start > end){
+            if(Number(start) > Number(end)){
                 toastr.error('Başlangıç Saati  Bitiş saatinden büyük olamaz', 'Hata')
                 return false;
             }
@@ -513,13 +513,10 @@
             });
         }
 
-
         $.confirmDateReservation = function (id){
             let startDate = $('#startDate').val();
             let endDate = $('#endDate').val();
             let type = 2;
-
-
 
             if(startDate == endDate){
                 toastr.error('Başlangıç tarihi ile Bitiş tarihi aynı olamaz', 'Hata')

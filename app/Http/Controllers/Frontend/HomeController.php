@@ -214,8 +214,7 @@ class HomeController extends Controller
     //hesabım kısmına rezervasyonlarım çekildi
     public function account()
     {
-        $reservation = Reservation::with('car_park_places')->where('user_id', Auth::user()->id)
-            ->where('start_date', '>=' , Carbon::now()->format('Y-d-m'))->get();
+        $reservation = Reservation::with('car_park_places')->where('user_id', Auth::user()->id)->get();
 
         return view('frontend.home.account')->with('reservation', $reservation);
     }

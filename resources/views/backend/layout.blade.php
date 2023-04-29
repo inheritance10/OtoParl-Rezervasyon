@@ -79,9 +79,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="pull-left image">
                     <img src="/backend/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                 </div>
-                <div class="pull-left info">
-                    <p>{{\Illuminate\Support\Facades\Auth::user()->name}}</p>
-                </div>
+
             </div>
 
 
@@ -94,7 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <li><a href="{{route('car-park-info')}}"><i class="fa fa-link"></i> <span>Otopark Bilgileri</span></a></li>
                 <li><a href="{{route('car-park-place')}}"><i class="fa fa-link"></i> <span>Park Yeri Bilgileri</span></a></li>
                 <li><a href="{{route('reservation-subscrib')}}"><i class="fa fa-link"></i> <span>Aylık Aboneler</span></a></li>
-                <li><a href="#"><i class="fa fa-exit"></i> <span>Çıkış Yap</span></a></li>
+                <li><a href="{{route('logout-admin')}}"><i class="fa fa-exit"></i> <span>Çıkış Yap</span></a></li>
             </ul>
             <!-- /.sidebar-menu -->
         </section>

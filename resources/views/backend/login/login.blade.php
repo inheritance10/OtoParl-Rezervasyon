@@ -36,6 +36,11 @@
     <div class="login-box-body">
         <p class="login-box-msg">Giriş yapmak için bilgileri giriniz</p>
 
+        @if(\Illuminate\Support\Facades\Session::has('error'))
+            <div class="alert alert-danger">
+                {{session('error')}}
+            </div>
+        @endif
         <form action="{{route('login-post')}}" method="post">
             @csrf
             <div class="form-group has-feedback">

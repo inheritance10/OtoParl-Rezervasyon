@@ -54,9 +54,10 @@ class UserController extends Controller
     {
         try {
             $save = User::create([
-               'email' => $request->post('email'),
+                'email' => $request->post('email'),
                 'password' => Hash::make($request->post('password')),
-                'name' => $request->post('name')
+                'name' => $request->post('name'),
+                'type' => 2
             ]);
 
             if ($save) {
@@ -71,10 +72,7 @@ class UserController extends Controller
                 ]);
             }
         } catch (Exception $e){
-            return response()->json([
-                'status' => 0,
-                'message' => $e.getMessage()
-            ]);
+            return 'hata';
         }
     }
 

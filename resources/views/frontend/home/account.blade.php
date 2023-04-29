@@ -200,11 +200,31 @@
                                 PNR: {{$data->pnr_code}}
                             </h3>
                             @if($data->type == 1)
-                                <p style="color: #000">{{$data->date}} tarihinde  {{$data->start_hour}} : 00 - {{$data->end_hour}} : 00</p>
+                                @if(\Carbon\Carbon::parse($data->date)->format('Y-m-d') <= \Carbon\Carbon::now()->format('Y-m-d')
+                                      || \Carbon\Carbon::now()->hour > $data->end_hour
+                                    )
+                                    <p class="alert alert-danger">Rezervasyon Süresi Dolmuştur</p>
+                                    <p style="color: #000">{{$data->date}} tarihinde  {{$data->start_hour}} : 00 - {{$data->end_hour}} : 00</p>
+                                @else
+                                    <p style="color: #000">{{$data->date}} tarihinde  {{$data->start_hour}} : 00 - {{$data->end_hour}} : 00</p>
+                                @endif
+
                             @elseif($data->type == 2)
-                                <p style="color: #000">{{$data->start_date}} / {{$data->end_date}}</p>
+                                @if(\Carbon\Carbon::parse($data->end_date)->format('Y-m-d') < \Carbon\Carbon::now()->format('Y-m-d'))
+                                    <p class="alert alert-danger">Rezervasyon Süresi Dolmuştur</p>
+                                    <p style="color: #000">{{$data->start_date}} / {{$data->end_date}}</p>
+                                @else
+                                    <p style="color: #000">{{$data->start_date}} / {{$data->end_date}}</p>
+                                @endif
+
                             @elseif($data->type == 3)
-                                <p style="color: #000">{{$data->start_date}} / {{$data->end_date}} aralığında abonesiniz</p>
+                                @if(\Carbon\Carbon::parse($data->end_date)->format('Y-m-d') < \Carbon\Carbon::now()->format('Y-m-d'))
+                                    <p class="alert alert-danger">Rezervasyon Süresi Dolmuştur</p>
+                                    <p style="color: #000">{{$data->start_date}} / {{$data->end_date}} aralığında abonesiniz</p>
+                                @else
+                                    <p style="color: #000">{{$data->start_date}} / {{$data->end_date}} aralığında abonesiniz</p>
+                                @endif
+
                             @endif
 
                         </div>
