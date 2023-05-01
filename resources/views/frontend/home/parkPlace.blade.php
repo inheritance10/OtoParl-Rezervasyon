@@ -191,14 +191,39 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <span class="form-label">Tarih Seçiniz</span>
-                                <input class="form-control" id="date" name="date" type="date" required>
+                                <span class="form-label">Günlük Rezervasyon Sorgula</span>
+                                <input type="checkbox" id="date_checkbox" name="date_checkbox">
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <span class="form-label">Saatlik Rezervasyon Sorgula</span>
+                                <input  id="hour_checkbox" name="hour_checkbox" type="checkbox">
+                            </div>
+                        </div>
+                        <div class="col-sm-6" id="start_date_select" style="display: none">
+                            <div class="form-group">
+                                <span class="form-label">Başlangıç Tarihi Seçiniz</span>
+                                <input class="form-control" id="start_date" name="start_date" type="date">
+                            </div>
+                        </div>
+                        <div class="col-sm-6" id="end_date_select" style="display: none">
+                            <div class="form-group">
+                                <span class="form-label">Bitiş Tarihi Seçiniz</span>
+                                <input class="form-control" id="end_date" name="end_date" type="date">
+                            </div>
+                        </div>
+                        <div class="col-sm-6" id="hour_date_select" style="display: none">
+                            <div class="form-group">
+                                <span class="form-label">Tarih Seçiniz</span>
+                                <input class="form-control" id="date" name="date" type="date">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3" id="start_hour_select" style="display: none">
                             <div class="form-group">
                                 <span class="form-label">Başlangıç Saati Seçiniz</span>
-                                <select class="form-control" name="start_hour" type="date" required>
+                                <select class="form-control" name="start_hour" type="text">
                                     @for($i=7; $i<=23; $i++)
                                         <option>
                                             {{$i}} : 00
@@ -208,10 +233,10 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-3" id="end_hour_select" style="display: none">
                             <div class="form-group">
                                 <span class="form-label">Bitiş Saati Seçiniz</span>
-                                <select class="form-control" name="end_hour" type="date" required>
+                                <select class="form-control" name="end_hour" type="text">
                                     @for($i=7; $i<=23; $i++)
                                         <option>
                                             {{$i}} : 00
@@ -229,26 +254,36 @@
             </div>
 
             <p class="mt-3 alert alert-info">
-                {{$date}} tarihi  @if($start_hour != '' && $end_hour != '') {{$start_hour}} - {{$end_hour}} saatleri arası rezervasyon yapmaktasınız @endif
+                @if($start_date != "" && $end_date != "")
+                    {{$start_date}} / {{$end_date}} tarihleri arası rezervasyon sorgulaması yapmaktasınız
+                @elseif($date != "")
+                    {{$date}} tarihi  @if($start_hour != '' && $end_hour != '') {{$start_hour}} - {{$end_hour}} saatleri arası rezervasyon sorgulaması yapmaktasınız @endif
+                @endif
+
             </p>
         </div>
 
         <br><br>
         <div class="row">
             <h2>Müsait Park Yerleri</h2>
+            <?php $i = 0?>
             @foreach($available as $data)
-                <div class="col-sm-2 mt-3">
-                    <div style="background-color: green"  class="card">
-                        <div class="card-body">
-                            <a href="{{route('reservation', ['id' => $data['id'], 'date' => $date])}}" style="text-decoration: none">
-                                <h1 style="color: white">
-                                    {{$data['name']}}
-                                </h1>
-                                <p style="color: white" class="card-text">Devam etmek için tıklayın</p>
-                            </a>
+                @if(!($i == 0))
+                    <div class="col-sm-2 mt-3">
+                        <div style="background-color: green"  class="card">
+                            <div class="card-body">
+                                <a href="{{route('reservation', ['id' => $data['id'], 'date' => $date])}}" style="text-decoration: none">
+                                    <h1 style="color: white">
+                                        {{$data['name']}}
+                                    </h1>
+                                    <p style="color: white" class="card-text">Devam etmek için tıklayın</p>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
+                <?php $i++?>
+
             @endforeach
         </div>
 
@@ -266,7 +301,14 @@
                                 </h1>
                                 @if(count($data['table']) > 0)
                                     @foreach($data['table'] as $value)
-                                            <p style="font-weight: bold;color: white" class="card-text">{{$value['start_hour']}}-{{$value['end_hour']}} arasında rezervedir</p>
+                                            <p style="font-weight: bold;color: white" class="card-text">
+                                                @if($value['start_hour'] == null && $value['end_hour'] == null)
+                                                    {{$value['start_date']}}/ {{$value['end_date']}} arasında rezervedir
+                                                @else
+                                                    {{$value['start_hour']}}:00 - {{$value['end_hour']}}:00  arasında rezervedir
+                                                @endif
+
+                                            </p>
                                     @endforeach
                                 @elseif(count($data['isSubscrib']) > 0)
                                     @foreach($data['isSubscrib'] as $value)
@@ -284,12 +326,50 @@
     </div>
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+
+
+<script>
+
+    $(document).ready(function() {
+        $("#date_checkbox").click(function() {
+            if ($(this).prop("checked")) {
+                $("#start_date_select").removeAttr('style', 'display')
+                $("#end_date_select").removeAttr('style', 'display')
+                $("#hour_date_select").css('display', 'none')
+                $("#start_hour_select").css('display', 'none')
+                $("#end_hour_select").css('display', 'none')
+                $("#hour_checkbox").prop("checked", false);
+            }else{
+                $("#start_date_select").css('display', 'none')
+                $("#end_date_select").css('display', 'none')
+            }
+        });
+        $("#hour_checkbox").click(function() {
+            if ($(this).prop("checked")) {
+                $("#hour_date_select").removeAttr('style', 'display')
+                $("#start_hour_select").removeAttr('style', 'display')
+                $("#end_hour_select").removeAttr('style', 'display')
+                $("#start_date_select").css('display', 'none')
+                $("#end_date_select").css('display', 'none')
+                $("#date_checkbox").prop("checked", false);
+            }else{
+                $("#hour_date_select").css('display', 'none')
+                $("#start_hour_select").css('display', 'none')
+                $("#end_hour_select").css('display', 'none')
+            }
+        });
+    });
+
+
+</script>
+
 </body>
 </html>
 

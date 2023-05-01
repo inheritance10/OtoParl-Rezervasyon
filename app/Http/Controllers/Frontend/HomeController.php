@@ -26,14 +26,16 @@ class HomeController extends Controller
     //type = 3 abonman
     public function getParkPlace(Request $request,$id,$floor)
     {
-        if($request->has('date') && $request->has('start_hour') && $request->has('end_hour')){
-            $date =  Carbon::parse($request->date)->format('Y-m-d');
-            $start_hour =  $request->start_hour;
-            $end_hour = $request->end_hour;
-        }else{
-            $end_hour = "";
+        $date = "";
+        $start_date = "";
+        $end_date = "";
+        $start_hour = "";
+        $end_hour = "";
+        $date_checkbox = $request->input('date_checkbox') == 'on';
+        $hour_checkbox = $request->input('hour_checkbox') == 'on';
+
+        if(!($request->has('date'))){
             $date =   Carbon::now()->format('Y-m-d');
-            $start_hour = Carbon::now()->hour;
         }
 
         $notAvailable = [];
@@ -41,40 +43,107 @@ class HomeController extends Controller
 
         $parkPlace = CarParkPlace::with('reservation')->where('carpark_id', $id)->where('floor', $floor)->get();
 
-        foreach ($parkPlace as $data){
-            $isReservation = Reservation::where('park_place_id', $data->id)->whereDate('date', $date)
-            ->where(function ($query) use ($start_hour,$end_hour){
-                $query->whereBetween('start_hour', [$start_hour,$end_hour]);
-            })->get();
+        if ($date_checkbox) {
+            $start_date = $request->start_date;
+            $end_date = $request->end_date;
+            $i = 0;
+            foreach ($parkPlace as $data){
+                $isReservation = Reservation::where('park_place_id', $data->id)->get();
+                $isSubscrib = Reservation::where('park_place_id', $data->id)->where('type', 3)->get();
+                if(count($isReservation) > 0 || count($isSubscrib) > 0){
+                    foreach ($isReservation as $value){
+                        if(($start_date <= $value->start_date && $value->end_date <=  $end_date )){
+                            $notAvailable[] = [
+                                'id' => $data->id,
+                                'name' => $data->name,
+                                'table' => $isReservation,
+                                'isSubscrib' => $isSubscrib
+                            ];
+                        }else{
+                            $available[] = [
+                                'id' => $data->id,
+                                'name' => $data->name,
+                            ];
+                        }
 
-            $isSubscrib = Reservation::where('park_place_id', $data->id)->where('type', 3)->get();
+                    }
+                }else{
+                    $available[] = [
+                        'id' => $data->id,
+                        'name' => $data->name,
+                    ];
+                }
 
-            if(count($isReservation) > 0 || count($isSubscrib) > 0){
-                $notAvailable[] = [
-                    'id' => $data->id,
-                    'name' => $data->name,
-                    'table' => $isReservation,
-                    'isSubscrib' => $isSubscrib
-                ];
-            }else{
-                $available[] = [
-                    'id' => $data->id,
-                  'name' => $data->name,
-                    ''
-                ];
+
+
+
+
+            }
+        } else if ($hour_checkbox) {
+            $start_hour = $request->start_hour;
+            $end_hour = $request->end_hour;
+            $date = $request->date;
+
+
+            foreach ($parkPlace as $data){
+                $isReservation = Reservation::where('park_place_id', $data->id)->whereDate('date', $date)
+                    ->where(function ($query) use ($start_hour,$end_hour){
+                        $query->whereBetween('start_hour', [$start_hour,$end_hour])
+                            ->orWhereBetween('end_hour', [$start_hour,$end_hour]);
+                    })->get();
+
+                $isSubscrib = Reservation::where('park_place_id', $data->id)->where('type', 3)->get();
+
+                if(count($isReservation) > 0 || count($isSubscrib) > 0){
+                    $notAvailable[] = [
+                        'id' => $data->id,
+                        'name' => $data->name,
+                        'table' => $isReservation,
+                        'isSubscrib' => $isSubscrib
+                    ];
+                }else{
+                    $available[] = [
+                        'id' => $data->id,
+                        'name' => $data->name,
+                    ];
+                }
+            }
+        }else{
+
+            foreach ($parkPlace as $data){
+                $isReservation = Reservation::where('park_place_id', $data->id)->whereDate('date', $date)->get();
+
+                $isSubscrib = Reservation::where('park_place_id', $data->id)->where('type', 3)->get();
+
+                if(count($isReservation) > 0 || count($isSubscrib) > 0){
+                    $notAvailable[] = [
+                        'id' => $data->id,
+                        'name' => $data->name,
+                        'table' => $isReservation,
+                        'isSubscrib' => $isSubscrib
+                    ];
+                }else{
+                    $available[] = [
+                        'id' => $data->id,
+                        'name' => $data->name,
+                    ];
+                }
             }
         }
 
-        return view('frontend.home.parkPlace')->with('notAvailable', $notAvailable)
+        return view('frontend.home.parkPlace')
+            ->with('notAvailable', $notAvailable)
             ->with('available', $available)
             ->with('id', $id)
             ->with('floor', $floor)
             ->with('date',$date)
             ->with('start_hour', $start_hour)
-            ->with('end_hour', $end_hour);
+            ->with('end_hour', $end_hour)
+            ->with('start_date', $start_date)
+            ->with('end_date', $end_date);
     }
 
-    public function reservation($id,$date)
+    public function reservation($id,$date=null)
     {
         $reservation = Reservation::where('park_place_id', $id)->where('start_date', '>=' , Carbon::now()->format('Y-d-m'))->get();
         $carParkPlace = CarParkPlace::where('id', $id)->first();
@@ -131,6 +200,31 @@ class HomeController extends Controller
     public function dateReservationConfirm(Request $request)
     {
         try {
+            $datas = Reservation::where('park_place_id', $request->post('id'),)->get();
+            foreach ($datas as $value){
+
+                $start_date = Carbon::parse($request->post('start_date')); // seçilen başlangıç tarihi
+                $end_date = Carbon::parse($request->post('endDate')); // seçilen bitiş tarihi
+                $may_start = Carbon::parse($value->start_date);
+                $may_end = Carbon::parse($value->end_date);
+
+                $has_warning = false;
+
+                for ($date = $start_date; $date->lte($end_date); $date->addDay()) {
+                    if ($date->between($may_start, $may_end)) {
+                        $has_warning = true;
+                        break;
+                    }
+                }
+
+                if ($has_warning) {
+                    return response()->json([
+                        'status' => 4,
+                        'message' => 'Seçtiğiniz tarihler arasında en az bir gün rezerve edilmiştir. !!!'
+                    ]);
+                }
+            }
+
             while (true){
                 $pnr = $this->ticket_number();
                 $isPnrSame = Reservation::where('pnr_code', $pnr)->exists();
@@ -138,6 +232,7 @@ class HomeController extends Controller
                     break;
                 }
             }
+
             $save = Reservation::create([
                 'user_id' => Auth::user()->id,
                 'park_place_id' => $request->post('id'),
@@ -162,7 +257,7 @@ class HomeController extends Controller
         }catch (Exception $e){
             return response()->json([
                 'status' => 0,
-                'message' => $e.getMessage()
+                'message' => $e
             ]);
         }
     }

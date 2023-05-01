@@ -200,9 +200,10 @@
                                 PNR: {{$data->pnr_code}}
                             </h3>
                             @if($data->type == 1)
-                                @if(\Carbon\Carbon::parse($data->date)->format('Y-m-d') <= \Carbon\Carbon::now()->format('Y-m-d')
-                                      || \Carbon\Carbon::now()->hour > $data->end_hour
-                                    )
+                                @if(\Carbon\Carbon::parse($data->date)->format('Y-m-d') < \Carbon\Carbon::now()->format('Y-m-d'))
+                                    <p class="alert alert-danger">Rezervasyon Süresi Dolmuştur</p>
+                                    <p style="color: #000">{{$data->date}} tarihinde  {{$data->start_hour}} : 00 - {{$data->end_hour}} : 00</p>
+                                @elseif(\Carbon\Carbon::parse($data->date)->format('Y-m-d') == \Carbon\Carbon::now()->format('Y-m-d') && \Carbon\Carbon::now()->hour > $data->end_hour)
                                     <p class="alert alert-danger">Rezervasyon Süresi Dolmuştur</p>
                                     <p style="color: #000">{{$data->date}} tarihinde  {{$data->start_hour}} : 00 - {{$data->end_hour}} : 00</p>
                                 @else

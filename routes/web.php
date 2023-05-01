@@ -22,7 +22,7 @@ Route::group(['middleware' => 'auth'], function (){
     Route::get('/otoparkcim', [HomeController::class,'index'])->name('home');
     Route::get('/account', [HomeController::class,'account'])->name('account');
     Route::get('/get-park-place/{id}/{floor}', [HomeController::class,'getParkPlace'])->name('get-park-place');
-    Route::get('/reservation/{id}/{date}', [HomeController::class,'reservation'])->name('reservation');
+    Route::get('/reservation/{id}/{date?}', [HomeController::class,'reservation'])->name('reservation');
     Route::post('/date-reservation-confirm', [HomeController::class,'dateReservationConfirm'])->name('date-reservation-confirm');
     Route::post('/hour-reservation-confirm', [HomeController::class,'hourReservationConfirm'])->name('hour-reservation-confirm');
     Route::post('/subscrib-reservation-confirm', [HomeController::class,'subscribReservationConfirm'])->name('subscrib-reservation-confirm');

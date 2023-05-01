@@ -404,7 +404,7 @@
                 (day<10 ? '0' : '') + day;
 
             if(startDate < output){
-                toastr.error('Başlangıç Tarihi ile Şimdi tarihan küçük olamaz', 'Hata')
+                toastr.error('Başlangıç Tarihi ile Şimdiki tarihten küçük olamaz', 'Hata')
                 return false;
             }
 
@@ -436,12 +436,21 @@
 
             $('#datePriceText').html('Ödenecek Tutar = '+datePrice+'₺');
         }
+
         $.priceHourCalculate = function (){
             let startHour =$('#startHour').val().replace(': 00','');
             let endHour =$('#endHour').val().replace(': 00','');
 
             if(startHour == endHour){
                 toastr.error('Başlangıç Saati ile Bitiş saati aynı olamaz', 'Hata')
+                return false;
+            }
+
+            let start = $('#startHour').val().replace(': 00', '');
+            let end = $('#endHour').val().replace(': 00', '');
+
+            if(Number(start) > Number(end)){
+                toastr.error('Başlangıç Saati  Bitiş saatinden büyük olamaz', 'Hata')
                 return false;
             }
 
@@ -548,6 +557,8 @@
                         toastr.success(response.message,'Başarılı');
                         window.location.href = '{{route('home')}}'
                     }else if(response.status == 2){
+                        toastr.error(response.message,'Hata')
+                    }else if(response.status == 4){
                         toastr.error(response.message,'Hata')
                     }else{
                         toastr.error(response.message,'Hata')
