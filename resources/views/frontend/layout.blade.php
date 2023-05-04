@@ -23,7 +23,6 @@
 
         #booking {
             font-family: 'Montserrat', sans-serif;
-            background-image: url('https://i.imgur.com/ZaRYfYW.jpg');
             background-size: cover;
             background-position: center;
         }
