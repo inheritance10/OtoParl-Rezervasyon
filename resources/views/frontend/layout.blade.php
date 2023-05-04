@@ -184,23 +184,38 @@
         <img width="1000px" height="500px" src="./assets/img/oto.png" alt="">
         <div class="row">
             <?php
-             $floor_count = $floor[0]->floor_count;
-             $park_count = $floor[0]->park_count;
+            $floor_count = "";
+            $park_count = "";
+                if(count($floor) > 0){
+                    $floor_count = $floor[0]->floor_count;
+                    $park_count = $floor[0]->park_count;
+                }
+
             ?>
-            @for($i=1 ; $i<=$floor_count; $i++)
-                <div class="col-sm-3 m-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <a href="{{route('get-park-place', [$floor[0]->id,$i])}}" style="text-decoration: none">
-                                <h1>
-                                    {{$i}}. Kat
-                                </h1>
-                                <p class="card-text">Rerzervasyon yapmak için tıklayın</p>
-                            </a>
+            @if($floor_count > 0)
+                @for($i=1 ; $i<=$floor_count; $i++)
+                    <div class="col-sm-3 m-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <a href="{{route('get-park-place', [$floor[0]->id,$i])}}" style="text-decoration: none">
+                                    <h1>
+                                        {{$i}}. Kat
+                                    </h1>
+                                    <p class="card-text">Rerzervasyon yapmak için tıklayın</p>
+                                </a>
+                            </div>
                         </div>
                     </div>
+                @endfor
+            @else
+                <div class="alert alert-danger">
+                    <p>
+                        Kat Bilgisi Bulunmamakta
+                    </p>
                 </div>
-            @endfor
+            @endif
+
+
         </div>
     </div>
 </div>
